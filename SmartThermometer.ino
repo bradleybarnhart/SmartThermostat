@@ -1,13 +1,13 @@
 #include "src/hardware/TemperatureSensor.h"
 #include "src/hardware/Led.h"
-
-const float TEMPERATURE_TARGET_CELCIUS = 21.0; 
-const float TEMPERATURE_TOLERANCE_CELCIUS = 2.5; 
+#include "src/config/ThermoConfigurationAccessor.h"
 
 const int SAMPLES_PER_CYCLE = 60; 
 const int MIN_SAMPLE_PERIOD_MILLISECONDS = 1000; 
 
 unsigned long _sampleCounter; 
+
+ThermoConfigurationAccessor thermoConfigurationAccessor; 
 
 TemperatureSensor temperatureSensor1(A0, SAMPLES_PER_CYCLE); 
 TemperatureSensor temperatureSensor2(A1, SAMPLES_PER_CYCLE); 
@@ -54,8 +54,8 @@ void printTemperatureReading(int sensorId, float temperatureCelcius) {
 }
 
 void updateLedStatus(float temperatureCelcius) {
-  float absoluteError = abs(temperatureCelcius - TEMPERATURE_TARGET_CELCIUS); 
-  boolean statusOk = absoluteError <= TEMPERATURE_TOLERANCE_CELCIUS; 
+  float absoluteError = abs(temperatureCelcius - thermoConfigurationAccessor.getTemperatureTargetCelcius()); 
+  boolean statusOk = absoluteError <= thermoConfigurationAccessor.getTemperatureToleranceCelcius(); 
   greenLed.setStatus(statusOk); 
   redLed.setStatus(!statusOk); 
 }
