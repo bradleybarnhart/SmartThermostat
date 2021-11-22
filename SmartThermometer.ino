@@ -5,7 +5,7 @@
 const int SAMPLES_PER_CYCLE = 60; 
 const int MIN_SAMPLE_PERIOD_MILLISECONDS = 1000; 
 
-unsigned long _sampleCounter; 
+unsigned long _sampleCount; 
 
 ThermoConfigurationAccessor thermoConfigurationAccessor; 
 
@@ -16,17 +16,13 @@ Led redLed(12);
 
 void setup() {
   Serial.begin(9600); 
-  // perform important jobs immediately on first loop iteration
-  _sampleCounter = SAMPLES_PER_CYCLE; 
+  _sampleCount = 0; 
 }
 
 void loop() {
   unsigned long startMillis = millis(); 
 
-  temperatureSensor1.recordSample();  
-  temperatureSensor2.recordSample(); 
-
-  if (_sampleCounter == SAMPLES_PER_CYCLE) {
+  if (_sampleCount % SAMPLES_PER_CYCLE == 0) {
     float temperatureReading1 = temperatureSensor1.getAverageTemperatureCelcius(); 
     float temperatureReading2 = temperatureSensor2.getAverageTemperatureCelcius(); 
     printTemperatureReading(1, temperatureReading1); 
@@ -34,14 +30,14 @@ void loop() {
 
     float avgTemperatureReading = (temperatureReading1 + temperatureReading2) / 2; 
     updateLedStatus(avgTemperatureReading); 
-
-    _sampleCounter = 0; 
-  } else {
-    _sampleCounter++; 
   }
 
-  unsigned long stopMillis = millis(); 
+  temperatureSensor1.recordSample();  
+  temperatureSensor2.recordSample(); 
 
+  _sampleCount++; 
+
+  unsigned long stopMillis = millis(); 
   // delay if elapsed time < min sample period
   delay(max(0, MIN_SAMPLE_PERIOD_MILLISECONDS - (stopMillis - startMillis)));
 }
