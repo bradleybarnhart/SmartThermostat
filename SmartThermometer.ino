@@ -3,9 +3,10 @@
 #include "src/config/ThermoConfigurationAccessor.h"
 
 const int SAMPLES_PER_CYCLE = 60; 
-const int MIN_SAMPLE_PERIOD_MILLISECONDS = 1000; 
+const unsigned long MIN_SAMPLE_PERIOD_MILLISECONDS = 1000UL; 
 
-unsigned long _sampleCount; 
+unsigned long sampleCount; 
+unsigned long lastSampleMillis; 
 
 ThermoConfigurationAccessor thermoConfigurationAccessor; 
 
@@ -16,13 +17,19 @@ Led redLed(12);
 
 void setup() {
   Serial.begin(9600); 
-  _sampleCount = 0; 
+  delay(5000); 
+  sampleCount = 0; 
+  lastSampleMillis = millis(); 
 }
 
 void loop() {
-  unsigned long startMillis = millis(); 
+  if (millis() - lastSampleMillis < MIN_SAMPLE_PERIOD_MILLISECONDS) {
+    delay(10); 
+    return; 
+  }
+  lastSampleMillis = millis(); 
 
-  if (_sampleCount % SAMPLES_PER_CYCLE == 0) {
+  if (sampleCount != 0 && sampleCount % SAMPLES_PER_CYCLE == 0) {
     float temperatureReading1 = temperatureSensor1.getAverageTemperatureCelcius(); 
     float temperatureReading2 = temperatureSensor2.getAverageTemperatureCelcius(); 
     printTemperatureReading(1, temperatureReading1); 
@@ -30,16 +37,12 @@ void loop() {
 
     float avgTemperatureReading = (temperatureReading1 + temperatureReading2) / 2; 
     updateLedStatus(avgTemperatureReading); 
-  }
+  } 
 
-  temperatureSensor1.recordSample();  
+  temperatureSensor1.recordSample(); 
   temperatureSensor2.recordSample(); 
 
-  _sampleCount++; 
-
-  unsigned long stopMillis = millis(); 
-  // delay if elapsed time < min sample period
-  delay(max(0, MIN_SAMPLE_PERIOD_MILLISECONDS - (stopMillis - startMillis)));
+  sampleCount++;
 }
 
 void printTemperatureReading(int sensorId, float temperatureCelcius) {
