@@ -7,20 +7,20 @@ TemperatureSensor::TemperatureSensor(int analogPin, int windowSize) : _averaging
 }
 
 void TemperatureSensor::init() {
-  float initialReading = readTemperatureCelcius(); 
+  float initialReading = readTemperatureCelsius(); 
   _averagingBuffer.fill(initialReading); 
 }
 
-float TemperatureSensor::getAverageTemperatureCelcius() {
+float TemperatureSensor::getAverageTemperatureCelsius() {
   return _averagingBuffer.getAverage(); 
 }
 
 void TemperatureSensor::recordSample() {
-  float temperatureCelcius = readTemperatureCelcius();
-  _averagingBuffer.put(temperatureCelcius);
+  float temperatureCelsius = readTemperatureCelsius();
+  _averagingBuffer.put(temperatureCelsius);
 }
 
-float TemperatureSensor::readTemperatureCelcius() {
+float TemperatureSensor::readTemperatureCelsius() {
   float voltage = readVoltage(); 
   // https://kookye.com/2019/08/28/arduino-lesson-tmp36/
   return (voltage - 0.5) * 100;

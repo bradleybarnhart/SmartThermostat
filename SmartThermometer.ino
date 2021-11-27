@@ -2,7 +2,7 @@
 #include "src/hardware/Led.h"
 #include "src/config/ThermoConfigurationAccessor.h"
 
-const int SAMPLES_PER_CYCLE = 60; 
+const int SAMPLES_PER_CYCLE = 30; 
 const unsigned long MIN_SAMPLE_PERIOD_MILLISECONDS = 1000UL; 
 
 unsigned long sampleCount; 
@@ -30,8 +30,8 @@ void loop() {
   lastSampleMillis = millis(); 
 
   if (sampleCount != 0 && sampleCount % SAMPLES_PER_CYCLE == 0) {
-    float temperatureReading1 = temperatureSensor1.getAverageTemperatureCelcius(); 
-    float temperatureReading2 = temperatureSensor2.getAverageTemperatureCelcius(); 
+    float temperatureReading1 = temperatureSensor1.getAverageTemperatureCelsius(); 
+    float temperatureReading2 = temperatureSensor2.getAverageTemperatureCelsius(); 
     printTemperatureReading(1, temperatureReading1); 
     printTemperatureReading(2, temperatureReading2); 
 
@@ -45,16 +45,16 @@ void loop() {
   sampleCount++;
 }
 
-void printTemperatureReading(int sensorId, float temperatureCelcius) {
+void printTemperatureReading(int sensorId, float temperatureCelsius) {
   Serial.print("Temperature (celsius) for sensor "); 
   Serial.print(sensorId); 
   Serial.print(" = "); 
-  Serial.println(temperatureCelcius); 
+  Serial.println(temperatureCelsius); 
 }
 
-void updateLedStatus(float temperatureCelcius) {
-  float absoluteError = abs(temperatureCelcius - thermoConfigurationAccessor.getTemperatureTargetCelcius()); 
-  boolean statusOk = absoluteError <= thermoConfigurationAccessor.getTemperatureToleranceCelcius(); 
+void updateLedStatus(float temperatureCelsius) {
+  float absoluteError = abs(temperatureCelsius - thermoConfigurationAccessor.getTemperatureTargetCelsius()); 
+  boolean statusOk = absoluteError <= thermoConfigurationAccessor.getTemperatureToleranceCelsius(); 
   greenLed.setStatus(statusOk); 
   redLed.setStatus(!statusOk); 
 }

@@ -5,12 +5,12 @@
 
 ThermoConfigurationAccessor::ThermoConfigurationAccessor() {}; 
 
-float ThermoConfigurationAccessor::getTemperatureTargetCelcius() {
-  return getOrDefault(TEMPERATURE_TARGET_ADDRESS, DEFAULT_TEMPERATURE_TARGET_CELCIUS); 
+float ThermoConfigurationAccessor::getTemperatureTargetCelsius() {
+  return getOrDefault(TEMPERATURE_TARGET_ADDRESS, DEFAULT_TEMPERATURE_TARGET_CELSIUS); 
 }
 
-float ThermoConfigurationAccessor::getTemperatureToleranceCelcius() {
-  return getOrDefault(TEMPERATURE_TOLERANCE_ADDRESS, DEFAULT_TEMPERATURE_TOLERANCE_CELCIUS); 
+float ThermoConfigurationAccessor::getTemperatureToleranceCelsius() {
+  return getOrDefault(TEMPERATURE_TOLERANCE_ADDRESS, DEFAULT_TEMPERATURE_TOLERANCE_CELSIUS); 
 }
 
 float ThermoConfigurationAccessor::getOrDefault(int startAddress, float defaultValue) {
@@ -20,11 +20,11 @@ float ThermoConfigurationAccessor::getOrDefault(int startAddress, float defaultV
   return (value == 0x00000000 || value == 0xffffffff) ? defaultValue : value;  
 }
 
-void ThermoConfigurationAccessor::putTemperatureTargetCelcius(float value) {
+void ThermoConfigurationAccessor::putTemperatureTargetCelsius(float value) {
   put(TEMPERATURE_TARGET_ADDRESS, value); 
 }
 
-void ThermoConfigurationAccessor::putTemperatureToleranceCelcius(float value) {
+void ThermoConfigurationAccessor::putTemperatureToleranceCelsius(float value) {
   put(TEMPERATURE_TOLERANCE_ADDRESS, value); 
 }
 
