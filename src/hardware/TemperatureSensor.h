@@ -9,7 +9,7 @@ class TemperatureSensor {
   public:
     TemperatureSensor(int analogPin, int numSamplesToAverage); 
     void recordSample(); 
-    float getAverageTemperatureCelcius(); 
+    float getAverageTemperatureCelsius(); 
 
   private:
     int _analogPin; 
@@ -17,7 +17,7 @@ class TemperatureSensor {
 
     void init(); 
     float readVoltage(); 
-    float readTemperatureCelcius(); 
+    float readTemperatureCelsius(); 
 };
 
 #endif

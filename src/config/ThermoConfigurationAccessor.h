@@ -5,15 +5,15 @@ class ThermoConfigurationAccessor {
 
   public:
     ThermoConfigurationAccessor(); 
-    float getTemperatureTargetCelcius();
-    float getTemperatureToleranceCelcius();
-    void putTemperatureTargetCelcius(float value);
-    void putTemperatureToleranceCelcius(float value);
+    float getTemperatureTargetCelsius();
+    float getTemperatureToleranceCelsius();
+    void putTemperatureTargetCelsius(float value);
+    void putTemperatureToleranceCelsius(float value);
     void reset(); 
 
   private:
-    static constexpr float DEFAULT_TEMPERATURE_TARGET_CELCIUS = 21.0; 
-    static constexpr float DEFAULT_TEMPERATURE_TOLERANCE_CELCIUS = 2.0; 
+    static constexpr float DEFAULT_TEMPERATURE_TARGET_CELSIUS = 21.0; 
+    static constexpr float DEFAULT_TEMPERATURE_TOLERANCE_CELSIUS = 2.0; 
 
     static const int TEMPERATURE_TARGET_ADDRESS = 0; 
     static const int TEMPERATURE_TOLERANCE_ADDRESS = 256;
