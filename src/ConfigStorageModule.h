@@ -1,10 +1,10 @@
-#ifndef StorageModule_h
-#define StorageModule_h
+#ifndef ConfigStorageModule_h
+#define ConfigStorageModule_h
 
-class StorageModule { 
+class ConfigStorageModule { 
 
   public:
-    StorageModule(); 
+    ConfigStorageModule(); 
     float getDaytimeTemperatureTargetCelsius();
     float getEveningTemperatureTargetCelsius();
     float getNighttimeTemperatureTargetCelsius();

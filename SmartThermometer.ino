@@ -1,6 +1,6 @@
 #include "src/TemperatureSensor.h"
 #include "src/Led.h"
-#include "src/StorageModule.h"
+#include "src/ConfigStorageModule.h"
 
 const int SAMPLES_PER_CYCLE = 30; 
 const unsigned long MIN_SAMPLE_PERIOD_MILLISECONDS = 1000UL; 
@@ -8,7 +8,7 @@ const unsigned long MIN_SAMPLE_PERIOD_MILLISECONDS = 1000UL;
 unsigned long sampleCount; 
 unsigned long lastSampleMillis; 
 
-StorageModule storageModule; 
+ConfigStorageModule storageModule; 
 
 TemperatureSensor temperatureSensor1(A0, SAMPLES_PER_CYCLE); 
 TemperatureSensor temperatureSensor2(A1, SAMPLES_PER_CYCLE); 
