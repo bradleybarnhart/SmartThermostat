@@ -48,10 +48,10 @@ void loop() {
 void performEndOfCycleJobs() {
   int temperatureSensorBitMask = configStorageModule.getActiveSensorMask();
   for (int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
-    float sensorAvg = getAverageTemperatureSensorReadings((float) (1 << i)); 
+    float sensorAvg = getAverageTemperatureSensorReading(1 << i); 
     Serial.print("Temperature (celsius) for sensor "); Serial.print(i + 1); Serial.print(" = "); Serial.println(sensorAvg);
   }
-  float activeSensorAvg = getAverageTemperatureSensorReadings(temperatureSensorBitMask); 
+  float activeSensorAvg = getAverageTemperatureSensorReading(temperatureSensorBitMask); 
   updateLedStatus(activeSensorAvg); 
 }
 
@@ -62,7 +62,7 @@ void updateLedStatus(float temperatureCelsius) {
   redLed.setStatus(!statusOk); 
 }
 
-float getAverageTemperatureSensorReadings(int sensorBitMask) {
+float getAverageTemperatureSensorReading(int sensorBitMask) {
   float sum = 0.0; 
   int count = 0; 
   for (int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
