@@ -2,7 +2,7 @@
 #define TemperatureSensor_h
 
 #include "Arduino.h"
-#include "../utils/AveragingBuffer.h"
+#include "AveragingBuffer.h"
 
 class TemperatureSensor {
 

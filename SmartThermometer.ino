@@ -1,6 +1,6 @@
-#include "src/hardware/TemperatureSensor.h"
-#include "src/hardware/Led.h"
-#include "src/config/ThermoConfigurationAccessor.h"
+#include "src/TemperatureSensor.h"
+#include "src/Led.h"
+#include "src/StorageModule.h"
 
 const int SAMPLES_PER_CYCLE = 30; 
 const unsigned long MIN_SAMPLE_PERIOD_MILLISECONDS = 1000UL; 
@@ -8,7 +8,7 @@ const unsigned long MIN_SAMPLE_PERIOD_MILLISECONDS = 1000UL;
 unsigned long sampleCount; 
 unsigned long lastSampleMillis; 
 
-ThermoConfigurationAccessor thermoConfigurationAccessor; 
+StorageModule storageModule; 
 
 TemperatureSensor temperatureSensor1(A0, SAMPLES_PER_CYCLE); 
 TemperatureSensor temperatureSensor2(A1, SAMPLES_PER_CYCLE); 
@@ -53,8 +53,8 @@ void printTemperatureReading(int sensorId, float temperatureCelsius) {
 }
 
 void updateLedStatus(float temperatureCelsius) {
-  float absoluteError = abs(temperatureCelsius - thermoConfigurationAccessor.getTemperatureTargetCelsius()); 
-  boolean statusOk = absoluteError <= thermoConfigurationAccessor.getTemperatureToleranceCelsius(); 
+  float absoluteError = abs(temperatureCelsius - storageModule.getDaytimeTemperatureTargetCelsius()); 
+  boolean statusOk = absoluteError <= storageModule.getTemperatureToleranceCelsius(); 
   greenLed.setStatus(statusOk); 
   redLed.setStatus(!statusOk); 
 }
