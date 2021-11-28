@@ -17,10 +17,6 @@ float StorageModule::getNighttimeTemperatureTargetCelsius() {
   return getOrDefault(NIGHTTIME_TEMPERATURE_TARGET_ADDRESS, DEFAULT_TEMPERATURE_TARGET_CELSIUS); 
 }
 
-float StorageModule::getDaytimeTemperatureTargetCelsius() {
-  return getOrDefault(DAYTIME_TEMPERATURE_TARGET_ADDRESS, DEFAULT_TEMPERATURE_TARGET_CELSIUS); 
-}
-
 float StorageModule::getTemperatureToleranceCelsius() {
   return getOrDefault(TEMPERATURE_TOLERANCE_ADDRESS, DEFAULT_TEMPERATURE_TOLERANCE_CELSIUS); 
 }

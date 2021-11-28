@@ -8,7 +8,6 @@ class StorageModule {
     float getDaytimeTemperatureTargetCelsius();
     float getEveningTemperatureTargetCelsius();
     float getNighttimeTemperatureTargetCelsius();
-    float getDaytimeTemperatureTargetCelsius();
     float getTemperatureToleranceCelsius();
     void putDaytimeTemperatureTargetCelsius(float value);
     void putEveningTemperatureTargetCelsius(float value);
