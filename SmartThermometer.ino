@@ -3,23 +3,27 @@
 #include "src/ConfigStorageModule.h"
 
 const int SAMPLES_PER_CYCLE = 30; 
-const unsigned long MIN_SAMPLE_PERIOD_MILLISECONDS = 1000UL; 
+const unsigned long MIN_SAMPLE_PERIOD_MILLISECONDS = 1000UL;
 
 unsigned long sampleCount; 
 unsigned long lastSampleMillis; 
 
-ConfigStorageModule storageModule; 
+ConfigStorageModule configStorageModule; 
 
-TemperatureSensor temperatureSensor1(A0, SAMPLES_PER_CYCLE); 
-TemperatureSensor temperatureSensor2(A1, SAMPLES_PER_CYCLE); 
+const int NUM_TEMPERATURE_SENSORS = 2; 
+TemperatureSensor temperatureSensors[] = {
+  TemperatureSensor(A0, SAMPLES_PER_CYCLE), 
+  TemperatureSensor(A1, SAMPLES_PER_CYCLE)
+}; 
+float temperatureSensorReadings[NUM_TEMPERATURE_SENSORS][SAMPLES_PER_CYCLE]; 
+
 Led greenLed(13);
 Led redLed(12); 
 
 void setup() {
-  Serial.begin(9600); 
-  delay(5000); 
-  sampleCount = 0; 
-  lastSampleMillis = millis(); 
+  Serial.begin(9600);
+  sampleCount = 0;
+  lastSampleMillis = millis();
 }
 
 void loop() {
@@ -27,34 +31,50 @@ void loop() {
     delay(10); 
     return; 
   }
-  lastSampleMillis = millis(); 
+  lastSampleMillis = millis();
 
-  if (sampleCount != 0 && sampleCount % SAMPLES_PER_CYCLE == 0) {
-    float temperatureReading1 = temperatureSensor1.getAverageTemperatureCelsius(); 
-    float temperatureReading2 = temperatureSensor2.getAverageTemperatureCelsius(); 
-    printTemperatureReading(1, temperatureReading1); 
-    printTemperatureReading(2, temperatureReading2); 
+  int cycleIdx = sampleCount % SAMPLES_PER_CYCLE; 
+  if (sampleCount != 0 && cycleIdx == 0) { 
+    performEndOfCycleJobs(); 
+  }
 
-    float avgTemperatureReading = (temperatureReading1 + temperatureReading2) / 2; 
-    updateLedStatus(avgTemperatureReading); 
+  for (int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
+    temperatureSensorReadings[i][cycleIdx] = temperatureSensors[i].readTemperatureCelsius(); 
   } 
-
-  temperatureSensor1.recordSample(); 
-  temperatureSensor2.recordSample(); 
 
   sampleCount++;
 }
 
-void printTemperatureReading(int sensorId, float temperatureCelsius) {
-  Serial.print("Temperature (celsius) for sensor "); 
-  Serial.print(sensorId); 
-  Serial.print(" = "); 
-  Serial.println(temperatureCelsius); 
+void performEndOfCycleJobs() {
+  int temperatureSensorBitMask = configStorageModule.getActiveSensorMask();
+  for (int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
+    float sensorAvg = getAverageTemperatureSensorReadings((float) (1 << i)); 
+    Serial.print("Temperature (celsius) for sensor "); Serial.print(i + 1); Serial.print(" = "); Serial.println(sensorAvg);
+  }
+  float activeSensorAvg = getAverageTemperatureSensorReadings(temperatureSensorBitMask); 
+  updateLedStatus(activeSensorAvg); 
 }
 
 void updateLedStatus(float temperatureCelsius) {
-  float absoluteError = abs(temperatureCelsius - storageModule.getDaytimeTemperatureTargetCelsius()); 
-  boolean statusOk = absoluteError <= storageModule.getTemperatureToleranceCelsius(); 
+  float absoluteError = abs(temperatureCelsius - configStorageModule.getDaytimeTemperatureTargetCelsius()); 
+  boolean statusOk = absoluteError <= configStorageModule.getTemperatureToleranceCelsius(); 
   greenLed.setStatus(statusOk); 
   redLed.setStatus(!statusOk); 
+}
+
+float getAverageTemperatureSensorReadings(int sensorBitMask) {
+  float sum = 0.0; 
+  int count = 0; 
+  for (int i = 0; i < NUM_TEMPERATURE_SENSORS; i++) {
+    if (!(sensorBitMask & (1 << i))) {
+      continue; 
+    }
+
+    for (int j = 0; j < SAMPLES_PER_CYCLE; j++) {
+      sum += temperatureSensorReadings[i][j]; 
+      count++; 
+    }
+  }
+
+  return count == 0 ? 0.0 : sum / count; 
 }

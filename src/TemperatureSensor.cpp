@@ -1,23 +1,8 @@
 #include "Arduino.h"
 #include "TemperatureSensor.h"
 
-TemperatureSensor::TemperatureSensor(int analogPin, int windowSize) : _averagingBuffer(windowSize) {
+TemperatureSensor::TemperatureSensor(int analogPin, int windowSize) {
   _analogPin = analogPin; 
-  init(); 
-}
-
-void TemperatureSensor::init() {
-  float initialReading = readTemperatureCelsius(); 
-  _averagingBuffer.fill(initialReading); 
-}
-
-float TemperatureSensor::getAverageTemperatureCelsius() {
-  return _averagingBuffer.getAverage(); 
-}
-
-void TemperatureSensor::recordSample() {
-  float temperatureCelsius = readTemperatureCelsius();
-  _averagingBuffer.put(temperatureCelsius);
 }
 
 float TemperatureSensor::readTemperatureCelsius() {
