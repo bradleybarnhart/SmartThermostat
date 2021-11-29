@@ -13,12 +13,13 @@ ConfigStorageModule configStorageModule;
 const int NUM_TEMPERATURE_SENSORS = 2; 
 TemperatureSensor temperatureSensors[] = {
   TemperatureSensor(A0, SAMPLES_PER_CYCLE), 
-  TemperatureSensor(A1, SAMPLES_PER_CYCLE)
+  // TODO currently we are using the NodeMCU esp8266 board which has only 1 analog pin
+  TemperatureSensor(A0, SAMPLES_PER_CYCLE)
 }; 
 float temperatureSensorReadings[NUM_TEMPERATURE_SENSORS][SAMPLES_PER_CYCLE]; 
 
-Led greenLed(13);
-Led redLed(12); 
+Led greenLed(D0);
+Led redLed(D1); 
 
 void setup() {
   Serial.begin(9600);
