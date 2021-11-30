@@ -1,0 +1,16 @@
+{
+    "sql": "SELECT IndoorTemperatureCelsius_Sensor2 FROM 'TemperatureMetrics'",
+    "ruleDisabled": false,
+    "awsIotSqlVersion": "2016-03-23",
+    "actions": [
+        {
+            "cloudwatchMetric": {
+                "metricName": "IndoorTemperatureCelsius_Sensor2",
+                "metricNamespace": "temperature",
+                "metricUnit": "None",
+                "metricValue": "${IndoorTemperatureCelsius_Sensor2}",
+                "roleArn": "arn:aws:iam::293298132528:role/service-role/CloudWatchWriteOnlyRole"
+            }
+        }
+    ]
+}

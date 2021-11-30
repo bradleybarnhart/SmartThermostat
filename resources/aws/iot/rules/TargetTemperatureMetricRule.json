@@ -1,0 +1,16 @@
+{
+    "sql": "SELECT TargetTemperatureCelsius FROM 'TemperatureMetrics'",
+    "ruleDisabled": false,
+    "awsIotSqlVersion": "2016-03-23",
+    "actions": [
+        {
+            "cloudwatchMetric": {
+                "metricName": "TargetTemperatureCelsius",
+                "metricNamespace": "temperature",
+                "metricUnit": "None",
+                "metricValue": "${TargetTemperatureCelsius}",
+                "roleArn": "arn:aws:iam::293298132528:role/service-role/CloudWatchWriteOnlyRole"
+            }
+        }
+    ]
+}

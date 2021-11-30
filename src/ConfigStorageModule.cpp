@@ -3,6 +3,8 @@
 #include "ConfigStorageModule.h"
 #include "Arduino.h"
 
+// TODO this class is currently disabled since the NodeMCU ESP8266 does not have a genuine EEPROM
+// rather than rewriting the code we use default values for now
 ConfigStorageModule::ConfigStorageModule() {}; 
 
 float ConfigStorageModule::getDaytimeTemperatureTargetCelsius() {
@@ -22,21 +24,23 @@ float ConfigStorageModule::getTemperatureToleranceCelsius() {
 }
 
 int ConfigStorageModule::getActiveSensorMask() {
-  return (int) getOrDefaultInt(ACTIVE_SENSOR_MASK_ADDRESS, 0xff);
+  return (int) getOrDefaultInt(ACTIVE_SENSOR_MASK_ADDRESS, 0xffffffff);
 }
 
 float ConfigStorageModule::getOrDefaultFloat(int startAddress, float defaultValue) {
-  float value; 
-  EEPROM.get(startAddress, value); 
-  // never-written memory byte = 255
-  return (value == 0xff) ? defaultValue : value;
+  // float value; 
+  // EEPROM.get(startAddress, value); 
+  // // never-written memory byte = 255
+  // return (value == 0xffffffff) ? defaultValue : value;
+  return defaultValue; 
 }
 
 int ConfigStorageModule::getOrDefaultInt(int startAddress, int defaultValue) {
-  int value; 
-  EEPROM.get(startAddress, value); 
-  // never-written memory byte = 255
-  return (value == 0xff) ? defaultValue : value;
+  // int value; 
+  // EEPROM.get(startAddress, value); 
+  // // never-written memory byte = 255
+  // return (value == 0xffffffff) ? defaultValue : value;
+  return defaultValue; 
 }
 
 void ConfigStorageModule::putDaytimeTemperatureTargetCelsius(float value) {
@@ -62,13 +66,13 @@ void ConfigStorageModule::putActiveSensorMask(int value) {
 void ConfigStorageModule::putFloat(int startAddress, float value) {
   // eeprom memory has a specified life of 100,000 write/erase cycles
   // put only writes the value if it differs from the one already saved 
-  EEPROM.put(startAddress, value); 
+  // EEPROM.put(startAddress, value); 
 }
 
 void ConfigStorageModule::putInt(int startAddress, int value) {
   // eeprom memory has a specified life of 100,000 write/erase cycles
   // put only writes the value if it differs from the one already saved 
-  EEPROM.put(startAddress, value); 
+  // EEPROM.put(startAddress, value); 
 }
 
 

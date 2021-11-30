@@ -1,8 +1,9 @@
 #include "Arduino.h"
 #include "TemperatureSensor.h"
 
-TemperatureSensor::TemperatureSensor(int analogPin, int windowSize) {
+TemperatureSensor::TemperatureSensor(int analogPin, float supplyVoltage) {
   _analogPin = analogPin; 
+  _supplyVoltage = supplyVoltage; 
 }
 
 float TemperatureSensor::readTemperatureCelsius() {
@@ -13,5 +14,5 @@ float TemperatureSensor::readTemperatureCelsius() {
 
 float TemperatureSensor::readVoltage() {
   int sensorInput = analogRead(_analogPin); 
-  return (double) sensorInput / 1023 * 5; 
+  return (double) sensorInput / 1024 * _supplyVoltage; 
 }

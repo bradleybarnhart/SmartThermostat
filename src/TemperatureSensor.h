@@ -6,11 +6,12 @@
 class TemperatureSensor {
 
   public:
-    TemperatureSensor(int analogPin, int numSamplesToAverage); 
+    TemperatureSensor(int analogPin, float supplyVoltage); 
     float readTemperatureCelsius();
 
   private:
     int _analogPin; 
+    float _supplyVoltage; 
 
     float readVoltage(); 
 };
